@@ -1,0 +1,3 @@
+tarea inicio { input(val); } ir_a mayor si val > 50; ir_a menor si val <= 50;
+tarea mayor { print("Es mayor"); }
+tarea menor { print("Es menor"); }

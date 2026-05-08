@@ -1,0 +1,1 @@
+tarea inicio { print("Salto"); ir_a destino; } tarea destino { print("Llegue"); }

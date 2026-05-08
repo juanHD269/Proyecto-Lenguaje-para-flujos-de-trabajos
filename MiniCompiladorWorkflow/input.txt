@@ -1,2 +1,16 @@
-# Input file for the workflow language
-# Example program
+tarea inicio {
+    print("Iniciando flujo...");
+    input(monto);
+}
+ir_a proceso si monto > 100;
+ir_a fin si monto <= 100;
+
+tarea proceso {
+    print("Procesando monto alto...");
+    monto = monto - 50;
+}
+ir_a fin;
+
+tarea fin {
+    print("Flujo terminado.");
+}

@@ -1,14 +1,20 @@
 #!/usr/bin/env python3
-"""
-MiniCompiladorWorkflow - Main entry point
-"""
-
 import sys
+import os
 from antlr4 import *
-from generated.WhileLangLexer import WhileLangLexer
-from generated.WhileLangParser import WhileLangParser
-from semantic_analyzer.semantic_visitor import SemanticVisitor
+from antlr4.error.ErrorListener import ErrorListener
+from generated.gramaticaLexer import gramaticaLexer
+from generated.gramaticaParser import gramaticaParser
+from semantic_analyzer.SemanticVisitor import SemanticVisitor
 from codegen.python_generator import PythonGenerator
+from codegen.ir_generator import IRGenerator
+
+class BailErrorListener(ErrorListener):
+    def __init__(self, phase):
+        self.phase = phase
+
+    def syntaxError(self, recognizer, offendingSymbol, line, column, msg, e):
+        raise Exception(f"[{self.phase} Error] at {line}:{column}: {msg}")
 
 def main():
     if len(sys.argv) != 2:
@@ -16,29 +22,72 @@ def main():
         sys.exit(1)
 
     input_file = sys.argv[1]
-    with open(input_file, 'r') as f:
+    if not os.path.exists(input_file):
+        print(f"Error: File {input_file} not found.")
+        sys.exit(1)
+
+    with open(input_file, 'r', encoding='utf-8') as f:
         input_text = f.read()
 
-    # Lexical and syntactic analysis
-    input_stream = InputStream(input_text)
-    lexer = WhileLangLexer(input_stream)
-    token_stream = CommonTokenStream(lexer)
-    parser = WhileLangParser(token_stream)
-    tree = parser.program()
+    log_output = []
+    log_output.append(f"--- Compiling {input_file} ---")
 
-    # Semantic analysis
-    semantic_visitor = SemanticVisitor()
-    semantic_visitor.visit(tree)
+    try:
+        # 1. Lexical Analysis
+        log_output.append("\n[Phase 1: Lexical Analysis]")
+        input_stream = InputStream(input_text)
+        lexer = gramaticaLexer(input_stream)
+        lexer.removeErrorListeners()
+        lexer.addErrorListener(BailErrorListener("Lexical"))
+        token_stream = CommonTokenStream(lexer)
+        token_stream.fill()
+        log_output.append(f"Successfully generated {len(token_stream.tokens)} tokens.")
 
-    # Code generation
-    code_generator = PythonGenerator()
-    output_code = code_generator.generate(tree)
+        # 2. Syntactic Analysis
+        log_output.append("\n[Phase 2: Syntactic Analysis]")
+        parser = gramaticaParser(token_stream)
+        parser.removeErrorListeners()
+        parser.addErrorListener(BailErrorListener("Syntactic"))
+        tree = parser.program()
+        log_output.append("Successfully built Parse Tree.")
 
-    # Write output
-    with open('output_program.py', 'w') as f:
-        f.write(output_code)
+        # 3. Semantic Analysis
+        log_output.append("\n[Phase 3: Semantic Analysis]")
+        semantic_visitor = SemanticVisitor()
+        semantic_visitor.visit(tree)
+        log_output.append("Successfully validated semantics and symbol table.")
 
-    print("Compilation successful. Output written to output_program.py")
+        # 4. Intermediate Code Generation (IR)
+        log_output.append("\n[Phase 4: Intermediate Code Generation]")
+        ir_generator = IRGenerator()
+        ir_code = ir_generator.generate(tree)
+        log_output.append("Successfully generated 3-Address Code.")
+
+        # 5. Target Code Generation (Python)
+        log_output.append("\n[Phase 5: Python Code Generation]")
+        code_generator = PythonGenerator()
+        output_code = code_generator.generate(tree)
+        log_output.append("Successfully generated executable Python script.")
+
+        # Write results
+        with open('output_program.py', 'w', encoding='utf-8') as f:
+            f.write(output_code)
+        
+        with open('output.txt', 'w', encoding='utf-8') as f:
+            f.write("\n".join(log_output))
+            f.write("\n\n--- Intermediate Code (TAC) ---\n")
+            f.write(ir_code)
+
+        print("Compilation successful.")
+        print("- Detailed log and IR written to output.txt")
+        print("- Python executable written to output_program.py")
+
+    except Exception as e:
+        error_msg = str(e)
+        print(f"Error during compilation: {error_msg}")
+        with open('output.txt', 'w', encoding='utf-8') as f:
+            f.write(f"Compilation Failed:\n{error_msg}")
+        sys.exit(1)
 
 if __name__ == "__main__":
     main()

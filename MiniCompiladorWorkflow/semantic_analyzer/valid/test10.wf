@@ -1,0 +1,2 @@
+tarea inicio { print("Profesor"); } ir_a fin si estado == "OK";
+tarea fin { print("Terminado"); }

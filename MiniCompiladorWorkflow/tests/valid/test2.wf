@@ -1,4 +1,1 @@
-a = 10;
-while (a > 0) {
-    a = a - 1;
-}
+tarea inicio { input(x); if (x > 0) { print("Positivo"); } else { print("Negativo"); } } ir_a fin; tarea fin { print("Fin"); }

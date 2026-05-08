@@ -1,0 +1,2 @@
+tarea inicio { res = (10 + 2) * 3 / 2; print(res); } ir_a fin;
+tarea fin { print("Fin"); }

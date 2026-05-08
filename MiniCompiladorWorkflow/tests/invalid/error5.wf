@@ -1,0 +1,1 @@
+tarea a { ir_a b; } tarea b { ir_a a; }

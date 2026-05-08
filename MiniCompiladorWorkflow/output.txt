@@ -1,1 +1,32 @@
-# Output log
+--- Compiling tests/valid/test5.wf ---
+
+[Phase 1: Lexical Analysis]
+Successfully generated 42 tokens.
+
+[Phase 2: Syntactic Analysis]
+Successfully built Parse Tree.
+
+[Phase 3: Semantic Analysis]
+Successfully validated semantics and symbol table.
+
+[Phase 4: Intermediate Code Generation]
+Successfully generated 3-Address Code.
+
+[Phase 5: Python Code Generation]
+Successfully generated executable Python script.
+
+--- Intermediate Code (TAC) ---
+LABEL inicio:
+a = 1
+b = 0
+t1 = a == 1
+t2 = b == 0
+t3 = t1 AND t2
+IF NOT t3 GOTO L1
+PRINT "AND funciona"
+GOTO L2
+LABEL L1:
+LABEL L2:
+GOTO fin
+LABEL fin:
+PRINT "Fin"

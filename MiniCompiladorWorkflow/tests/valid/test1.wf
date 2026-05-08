@@ -1,2 +1,1 @@
-x = 5;
-y = x + 1;
+tarea inicio { print("Hola"); } ir_a fin; tarea fin { print("Adios"); }

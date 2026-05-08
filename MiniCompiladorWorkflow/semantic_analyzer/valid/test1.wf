@@ -1,0 +1,2 @@
+tarea inicio { print("Hola"); } ir_a fin;
+tarea fin { print("Adios"); }

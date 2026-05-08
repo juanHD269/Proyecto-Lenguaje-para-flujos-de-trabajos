@@ -1,0 +1,1 @@
+tarea inicio { c = 0; while (c < 3) { print(c); c = c + 1; } } ir_a fin; tarea fin { print("Terminado"); }

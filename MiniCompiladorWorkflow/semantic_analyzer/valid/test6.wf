@@ -1,0 +1,2 @@
+tarea inicio { a = 1; if (a == 2 || a == 1) { print("OR funciona"); } } ir_a fin;
+tarea fin { print("Fin"); }

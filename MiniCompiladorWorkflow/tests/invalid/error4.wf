@@ -1,0 +1,1 @@
+tarea inicio { print(var_no_definida); }
