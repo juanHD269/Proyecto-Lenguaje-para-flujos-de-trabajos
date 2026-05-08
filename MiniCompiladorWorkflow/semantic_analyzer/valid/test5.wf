@@ -1,2 +1,0 @@
-tarea inicio { a = 1; b = 0; if (a == 1 && b == 0) { print("AND funciona"); } } ir_a fin;
-tarea fin { print("Fin"); }

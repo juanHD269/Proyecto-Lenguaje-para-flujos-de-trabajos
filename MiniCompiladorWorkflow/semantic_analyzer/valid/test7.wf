@@ -1,2 +1,0 @@
-tarea inicio { a = 5; if (!(a == 10)) { print("NOT funciona"); } } ir_a fin;
-tarea fin { print("Fin"); }

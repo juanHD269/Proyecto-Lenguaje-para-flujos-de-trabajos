@@ -1,2 +1,0 @@
-tarea inicio { input(x); if (x > 0) { print("Positivo"); } else { print("Cero o Negativo"); } } ir_a fin;
-tarea fin { print("Fin"); }
