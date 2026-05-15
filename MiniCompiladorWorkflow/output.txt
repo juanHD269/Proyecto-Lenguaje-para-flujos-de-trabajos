@@ -1,12 +1,14 @@
-COMPILATION LOG - Wed May 13 19:56:45 2026
---------------------------------------------------
-Lexical tokens: 22
-Semantic tasks: 2
---------------------------------------------------
+COMPILATION LOG - Fri May 15 13:55:43 2026
+------------------------------------------------------------
 
 --- INTERMEDIATE CODE (TAC) ---
 LABEL inicio:
-PRINT "Hola"
-GOTO fin
-LABEL fin:
-PRINT "Adios"
+READ val
+t1 = val > 50
+IF t1 GOTO mayor
+t2 = val <= 50
+IF t2 GOTO menor
+LABEL mayor:
+PRINT "Es mayor"
+LABEL menor:
+PRINT "Es menor"
